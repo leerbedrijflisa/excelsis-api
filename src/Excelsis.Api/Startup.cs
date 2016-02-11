@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNet.Builder;
+using Microsoft.AspNet.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Serialization;
 
@@ -20,5 +21,6 @@ namespace Excelsis.Api
             app.UseMvc();
         }
 
+        public static void Main(string[] args) => WebApplication.Run<Startup>(args);
     }
 }
