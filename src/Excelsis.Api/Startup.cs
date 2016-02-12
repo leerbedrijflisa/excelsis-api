@@ -20,7 +20,7 @@ namespace Excelsis.Api
             app.UseIISPlatformHandler();
             app.UseMvc();
         }
-
         public static void Main(string[] args) => WebApplication.Run<Startup>(args);
+
     }
 }
