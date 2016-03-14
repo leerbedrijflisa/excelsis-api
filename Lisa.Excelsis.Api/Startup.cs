@@ -3,7 +3,7 @@ using Microsoft.AspNet.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Serialization;
 
-namespace Excelsis.Api
+namespace Lisa.Excelsis.Api
 {
     public class Startup
     {
@@ -13,14 +13,22 @@ namespace Excelsis.Api
             {
                 opts.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
             });
+
+            services.AddCors();
         }
 
         public void Configure(IApplicationBuilder app)
         {
             app.UseIISPlatformHandler();
+            app.UseCors(cors =>
+            {
+                cors.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+            });
             app.UseMvc();
         }
-        public static void Main(string[] args) => WebApplication.Run<Startup>(args);
 
+        public static void Main(string[] args) => WebApplication.Run<Startup>(args);
     }
 }
