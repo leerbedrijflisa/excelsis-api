@@ -3,6 +3,7 @@ using Lisa.Common.WebApi;
 using Microsoft.Extensions.OptionsModel;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,6 +15,17 @@ namespace Lisa.Excelsis.Api
         public Database(IOptions<TableStorageSettings> settings)
         {
             _settings = settings.Value;
+        }
+
+        public async Task<DynamicModel> FetchAssessment(Guid id)
+        {
+            CloudTable table = await Connect();
+
+            var query = new TableQuery<DynamicEntity>();
+            var assessment = await table.ExecuteQuerySegmentedAsync(query, null);
+
+            var results = AssessmentMapper.ToModel(assessment.FirstOrDefault());
+            return results;
         }
 
         private async Task<CloudTable> Connect()
