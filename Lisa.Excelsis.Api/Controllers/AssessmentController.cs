@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Lisa.Excelsis.Api
 {
-    [Route("Assessments")]
+    [Route("assessments")]
     public class AssessmentController
     {
         public AssessmentController(Database database)
@@ -15,7 +15,12 @@ namespace Lisa.Excelsis.Api
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(Guid id)
         {
-            var result = await _db.FetchAssessments(id);
+            var result = await _db.FetchAssessment(id);
+
+            if (result == null)
+            {
+                return new HttpNotFoundResult();
+            }
 
             return new HttpOkObjectResult(result);
         }

@@ -5,7 +5,6 @@ using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Lisa.Excelsis.Api
@@ -20,11 +19,15 @@ namespace Lisa.Excelsis.Api
         public async Task<DynamicModel> FetchAssessment(Guid id)
         {
             CloudTable table = await Connect();
+            var query = TableOperation.Retrieve<DynamicEntity>("", id.ToString());
+            var assessment = await table.ExecuteAsync(query);
 
-            var query = new TableQuery<DynamicEntity>();
-            var assessment = await table.ExecuteQuerySegmentedAsync(query, null);
+            if (assessment.Result == null)
+            {
+                return null;
+            }
+            var results = AssessmentMapper.ToModel(assessment.Result);
 
-            var results = AssessmentMapper.ToModel(assessment.FirstOrDefault());
             return results;
         }
 
