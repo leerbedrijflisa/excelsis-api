@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Lisa.Excelsis.Api
 {
-    [Route("/assessments/")]
+    [Route("assessments")]
     public class AssessmentController : Controller
     {
         public AssessmentController(Database database)
