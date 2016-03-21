@@ -2,6 +2,7 @@
 using Microsoft.AspNet.Mvc;
 using System;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace Lisa.Excelsis.Api
 {
@@ -34,6 +35,11 @@ namespace Lisa.Excelsis.Api
             if (assessment == null)
             {
                 return new HttpNotFoundResult();
+            }
+            var validationResult = new AssessmentValidator().Validate(patches, assessment);
+            if (validationResult.HasErrors)
+            {
+                return new UnprocessableEntityObjectResult(validationResult.Errors);
             }
 
             var patcher = new ModelPatcher();
