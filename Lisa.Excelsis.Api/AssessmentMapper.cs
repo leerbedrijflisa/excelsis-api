@@ -34,7 +34,6 @@ namespace Lisa.Excelsis.Api
             }
 
             return entity;
-
         }
 
         public static DynamicModel ToModel(dynamic entity)
