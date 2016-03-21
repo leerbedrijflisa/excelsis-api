@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNet.Mvc;
+﻿using Lisa.Common.WebApi;
+using Microsoft.AspNet.Mvc;
 using System;
 using System.Threading.Tasks;
 
@@ -24,6 +25,25 @@ namespace Lisa.Excelsis.Api
 
             return new HttpOkObjectResult(result);
         }
+
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> Patch(Guid id, [FromBody] Patch[] patches)
+        {
+            var assessment = await _db.FetchAssessment(id);
+
+            if (assessment == null)
+            {
+                return new HttpNotFoundResult();
+            }
+
+            var patcher = new ModelPatcher();
+
+            patcher.Apply(patches, assessment);
+
+            assessment = await _db.PatchAssessment(assessment);
+            return new HttpNotFoundResult();
+        }
+
         private Database _db;
     }
 }

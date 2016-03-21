@@ -29,8 +29,8 @@ namespace Lisa.Excelsis.Api
             {
                 entity.Id = model.Id;
                 entity.Observations = JsonConvert.SerializeObject(model.Observations);
-                entity.PartitionKey = model.PartitionKey;
-                entity.RowKey = model.RowKey;
+                entity.PartitionKey = metadata.PartitionKey;
+                entity.RowKey = metadata.RowKey;
             }
 
             return entity;
