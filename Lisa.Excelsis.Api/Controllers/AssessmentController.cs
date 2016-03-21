@@ -40,8 +40,8 @@ namespace Lisa.Excelsis.Api
 
             patcher.Apply(patches, assessment);
 
-            assessment = await _db.PatchAssessment(assessment);
-            return new HttpNotFoundResult();
+            await _db.PatchAssessment(assessment);
+            return new HttpOkObjectResult(assessment);
         }
 
         private Database _db;
