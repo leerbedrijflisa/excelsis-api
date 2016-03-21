@@ -16,14 +16,18 @@ namespace Lisa.Excelsis.Api
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] DynamicModel assessment)
         {
+            var validationResult = new AssessmentValidator().Validate(assessment);
+            if (validationResult.HasErrors)
+            {
+                return new UnprocessableEntityObjectResult(validationResult.Errors);
+            }
             dynamic result = await _db.PostAssessment(assessment);
             var location = Url.RouteUrl("getSingle", new { Id = result.Id }, Request.Scheme);
 
             return new CreatedResult(location, result);
         }
 
-        [HttpGet]
-        [Route("{id}", Name = "getSingle")]
+        [HttpGet("{id}", Name = "getSingle")]
         public async Task<ObjectResult> Get(Guid id)
         {
             var result = new
