@@ -49,7 +49,7 @@ namespace Lisa.Excelsis.Api
                 }
             }
         }
-        public override void ValidateModel()
+        protected override void ValidateModel()
         {
             Required("observations", ValidateList);
         }
