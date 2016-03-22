@@ -49,9 +49,13 @@ namespace Lisa.Excelsis.Api
                 }
             }
         }
-        public override void ValidateModel()
+        protected override void ValidateModel()
         {
-            Required("observations", ValidateList);
+            Optional("observations", ValidateList);
+            Optional("crebo", NotEmpty);
+            Optional("cohort", NotEmpty);
+            Optional("assessors", NotEmpty);
+            Optional("assessed", NotEmpty);
         }
     }
 }
