@@ -48,6 +48,11 @@ namespace Lisa.Excelsis.Api
         [HttpPatch("{id}")]
         public async Task<IActionResult> Patch(Guid id, [FromBody] Patch[] patches)
         {
+            if (patches == null)
+            {
+                return new BadRequestResult();
+            }
+
             var assessment = await _db.FetchAssessment(id);
 
             if (assessment == null)
