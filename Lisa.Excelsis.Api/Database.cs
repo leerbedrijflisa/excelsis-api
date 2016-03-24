@@ -52,6 +52,14 @@ namespace Lisa.Excelsis.Api
             return result;
         }
 
+        public async Task PatchAssessment(DynamicModel assessment)
+        {
+            CloudTable table = await Connect();
+            var unmappedAssessment = AssessmentMapper.ToEntity(assessment);
+            var query = TableOperation.InsertOrReplace(unmappedAssessment);
+            await table.ExecuteAsync(query);
+        }
+
         private TableStorageSettings _settings;
     }
 }

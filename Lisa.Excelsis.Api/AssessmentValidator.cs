@@ -5,6 +5,11 @@ namespace Lisa.Excelsis.Api
 {
     public class AssessmentValidator : Validator
     {
+        protected override void ValidatePatch()
+        {
+            Ignore("id");
+            Allow("observations");
+        }
         private void ValidateList(string fieldName, object value)
         {
             string[] expectedValues = new string[] { "seen", "not seen", "not rated" };
@@ -51,6 +56,7 @@ namespace Lisa.Excelsis.Api
         }
         protected override void ValidateModel()
         {
+            Ignore("id");
             Required("observations", ValidateList);
         }
     }

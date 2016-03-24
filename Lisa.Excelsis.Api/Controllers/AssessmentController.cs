@@ -13,6 +13,19 @@ namespace Lisa.Excelsis.Api
             _db = database;
         }
 
+        [HttpGet("{id}", Name = "getSingle")]
+        public async Task<ActionResult> Get(Guid id)
+        {
+            var result = await _db.FetchAssessment(id);
+
+            if (result == null)
+            {
+                return new HttpNotFoundResult();
+            }
+
+            return new HttpOkObjectResult(result);
+        }
+
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] DynamicModel assessment)
         {
@@ -32,17 +45,27 @@ namespace Lisa.Excelsis.Api
             return new CreatedResult(location, result);
         }
 
-        [HttpGet("{id}", Name = "getSingle")]
-        public async Task<ActionResult> Get(Guid id)
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> Patch(Guid id, [FromBody] Patch[] patches)
         {
-            var result = await _db.FetchAssessment(id);
+            var assessment = await _db.FetchAssessment(id);
 
-            if (result == null)
+            if (assessment == null)
             {
                 return new HttpNotFoundResult();
             }
+            var validationResult = new AssessmentValidator().Validate(patches, assessment);
+            if (validationResult.HasErrors)
+            {
+                return new UnprocessableEntityObjectResult(validationResult.Errors);
+            }
 
-            return new HttpOkObjectResult(result);
+            var patcher = new ModelPatcher();
+
+            patcher.Apply(patches, assessment);
+
+            await _db.PatchAssessment(assessment);
+            return new HttpOkObjectResult(assessment);
         }
 
         private Database _db;
