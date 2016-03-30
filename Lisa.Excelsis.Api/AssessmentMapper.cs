@@ -21,7 +21,16 @@ namespace Lisa.Excelsis.Api
             if (metadata == null)
             {
                 entity.Id = Guid.NewGuid();
+                entity.StudentName = model.StudentName;
+                entity.StudentNumber = model.StudentNumber;
+                entity.Crebo = model.Crebo;
+                entity.Cohort = model.Cohort;
+                entity.ExamSubject = model.ExamSubject;
+                entity.ExamName = model.ExamName;
+                entity.Assessors = JsonConvert.SerializeObject(model.Assessors);
+                entity.Assessed = model.Assessed;
                 entity.Observations = JsonConvert.SerializeObject(model.Observations);
+
                 entity.RowKey = entity.Id.ToString();
                 entity.PartitionKey = "";
             }
@@ -45,6 +54,14 @@ namespace Lisa.Excelsis.Api
 
             dynamic model = new DynamicModel();
             model.Id = entity.Id;
+            model.StudentName = entity.StudentName;
+            model.StudentNumber = entity.StudentNumber;
+            model.Crebo = entity.Crebo;
+            model.Cohort = entity.Cohort;
+            model.ExamSubject = entity.ExamSubject;
+            model.ExamName = entity.ExamName;
+            model.Assessors = JsonConvert.DeserializeObject(entity.Assessors);
+            model.Assessed = entity.Assessed;
             model.Observations = JsonConvert.DeserializeObject(entity.Observations);
 
             var metadata = new
