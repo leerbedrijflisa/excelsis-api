@@ -8,6 +8,14 @@ namespace Lisa.Excelsis.Api
         protected override void ValidatePatch()
         {
             Ignore("id");
+            Allow("studentName");
+            Allow("studentNumber");
+            Allow("crebo");
+            Allow("cohort");
+            Allow("examSubject");
+            Allow("examName");
+            Allow("assessors");
+            Allow("assessed");
             Allow("observations");
         }
         private void ValidateList(string fieldName, object value)
