@@ -17,7 +17,7 @@ namespace Lisa.Excelsis.Api
             Allow("assessors");
             Allow("assessed");
             Allow("observations");
-            Allow("results");
+            Allow("norm");
         }
         private void ValidateList(string fieldName, object value)
         {
@@ -75,7 +75,7 @@ namespace Lisa.Excelsis.Api
             Optional("assessors", NotEmpty);
             Optional("assessed", NotEmpty);
             Optional("observations", ValidateList);
-            Optional("results", NotEmpty);
+            Optional("norm", NotEmpty);
         }
     }
 }
