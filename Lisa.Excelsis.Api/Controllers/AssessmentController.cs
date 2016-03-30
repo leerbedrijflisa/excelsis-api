@@ -16,6 +16,11 @@ namespace Lisa.Excelsis.Api
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] DynamicModel assessment)
         {
+            if ( assessment == null )
+            {
+                return new BadRequestResult();
+            }
+
             var validationResult = new AssessmentValidator().Validate(assessment);
             if (validationResult.HasErrors)
             {
