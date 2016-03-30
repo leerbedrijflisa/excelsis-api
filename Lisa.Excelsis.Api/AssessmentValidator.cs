@@ -57,12 +57,12 @@ namespace Lisa.Excelsis.Api
         protected override void ValidateModel()
         {
             Ignore("id");
-            Optional("StudentName", NotEmpty);
-            Optional("StudentNumber", NotEmpty);
+            Optional("studentName", NotEmpty);
+            Optional("studentNumber", NotEmpty);
             Optional("crebo", NotEmpty);
             Optional("cohort", NotEmpty);
-            Required("ExamSubject", NotEmpty);
-            Required("ExamName", NotEmpty);
+            Required("examSubject", NotEmpty);
+            Required("examName", NotEmpty);
             Optional("assessors", NotEmpty);
             Optional("assessed", NotEmpty);
             Optional("observations", ValidateList);
