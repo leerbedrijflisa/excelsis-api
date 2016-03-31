@@ -17,10 +17,23 @@ namespace Lisa.Excelsis.Api
             Allow("assessors");
             Allow("assessed");
             Allow("observations");
+            Allow("ratings");
         }
         private void ValidateList(string fieldName, object value)
         {
-            string[] expectedValues = new string[] { "seen", "not seen", "not rated" };
+            string[] expectedValues;
+            string allowed;
+            if (fieldName == "Observations")
+            {
+                expectedValues = new string[] { "seen", "not seen", "not rated" };
+                allowed = "seen, not seen and not rated";
+            }
+            else
+            {
+                expectedValues = new string[] { "excellent", "pass", "fail" };
+                allowed = "excellent, pass and fail";
+            }
+
             if ((value == null) ||
                 (value is JArray) && ((JArray)value).Count == 0)
             {
@@ -36,7 +49,21 @@ namespace Lisa.Excelsis.Api
                 Result.Errors.Add(error);
                 return;
             }
-
+            
+            if (value.GetType().Name != "JArray")
+            {
+                var error = new Error
+                {
+                    Code = 10,
+                    Message = $"The field '{fieldName}' doesn't expects the value '{value}' in it's array. Only '{allowed}' allowed.",
+                    Values = new
+                    {
+                        Field = fieldName
+                    }
+                };
+                Result.Errors.Add(error);
+                return;
+            }
             foreach(string val in (JArray)value)
             {
                 bool expected = false;
@@ -52,7 +79,7 @@ namespace Lisa.Excelsis.Api
                     var error = new Error
                     {
                         Code = 10,
-                        Message = $"The field '{fieldName}' doesn't expects the value '{val}' in it's array. Only 'seen', 'not seen' and 'not rated' allowed.",
+                        Message = $"The field '{fieldName}' doesn't expects the value '{val}' in it's array. Only {allowed} allowed.",
                         Values = new
                         {
                             Field = fieldName
@@ -74,6 +101,7 @@ namespace Lisa.Excelsis.Api
             Optional("assessors", NotEmpty);
             Optional("assessed", NotEmpty);
             Optional("observations", ValidateList);
+            Optional("ratings", ValidateList);
         }
     }
 }
