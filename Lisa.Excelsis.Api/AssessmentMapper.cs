@@ -31,6 +31,7 @@ namespace Lisa.Excelsis.Api
                 entity.Assessed = model.Assessed;
                 entity.Observations = JsonConvert.SerializeObject(model.Observations);
                 entity.Norm = JsonConvert.SerializeObject(model.Norm);
+                entity.Ratings = JsonConvert.SerializeObject(model.Ratings);
 
                 entity.RowKey = entity.Id.ToString();
                 entity.PartitionKey = "";
@@ -38,7 +39,18 @@ namespace Lisa.Excelsis.Api
             else
             {
                 entity.Id = model.Id;
+                entity.StudentName = model.StudentName;
+                entity.StudentNumber = model.StudentNumber;
+                entity.Crebo = model.Crebo;
+                entity.Cohort = model.Cohort;
+                entity.ExamSubject = model.ExamSubject;
+                entity.ExamName = model.ExamName;
+                entity.Assessors = JsonConvert.SerializeObject(model.Assessors);
+                entity.Assessed = model.Assessed;
                 entity.Observations = JsonConvert.SerializeObject(model.Observations);
+                entity.Norm = JsonConvert.SerializeObject(model.Norm);
+                entity.Ratings = JsonConvert.SerializeObject(model.Ratings);
+
                 entity.PartitionKey = metadata.PartitionKey;
                 entity.RowKey = metadata.RowKey;
             }
@@ -65,6 +77,7 @@ namespace Lisa.Excelsis.Api
             model.Assessed = entity.Assessed;
             model.Observations = JsonConvert.DeserializeObject(entity.Observations);
             model.Norm = JsonConvert.DeserializeObject(entity.Norm);
+            model.Ratings = JsonConvert.DeserializeObject(entity.Ratings);
 
             var metadata = new
             {
