@@ -33,10 +33,10 @@ namespace Lisa.Common.TableStorage
                 return true;
             }
 
-            if (FindProperty(binder.Name) != null)
-            {
-                return base.TryGetMember(binder, out result);
-            }
+            //if (FindProperty(binder.Name) != null)
+            //{
+            //    return base.TryGetMember(binder, out result);
+            //}
 
             result = null;
             return true;

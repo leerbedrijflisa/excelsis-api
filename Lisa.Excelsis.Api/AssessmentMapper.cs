@@ -73,11 +73,11 @@ namespace Lisa.Excelsis.Api
             model.Cohort = entity.Cohort;
             model.ExamSubject = entity.ExamSubject;
             model.ExamName = entity.ExamName;
-            model.Assessors = JsonConvert.DeserializeObject(entity.Assessors);
+            model.Assessors = JsonConvert.DeserializeObject(entity.Assessors ?? string.Empty);
             model.Assessed = entity.Assessed;
-            model.Observations = JsonConvert.DeserializeObject(entity.Observations);
-            model.Norm = JsonConvert.DeserializeObject(entity.Norm);
-            model.Ratings = JsonConvert.DeserializeObject(entity.Ratings);
+            model.Observations = JsonConvert.DeserializeObject(entity.Observations ?? string.Empty);
+            model.Norm = JsonConvert.DeserializeObject(entity.Norm ?? string.Empty);
+            model.Ratings = JsonConvert.DeserializeObject(entity.Ratings ?? string.Empty);
 
             var metadata = new
             {
