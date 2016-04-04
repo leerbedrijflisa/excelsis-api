@@ -40,10 +40,10 @@ namespace Lisa.Excelsis.Api
                 var error = new Error
                 {
                     Code = ErrorCode.EmptyValue,
-                    Message = $"The field '{fieldName}' should not be empty",
+                    Message = $"The field '{fieldName.ToLowerInvariant()}' should not be empty",
                     Values = new
                     {
-                        Field = fieldName
+                        Field = fieldName.ToLowerInvariant()
                     }
                 };
                 Result.Errors.Add(error);
@@ -55,10 +55,10 @@ namespace Lisa.Excelsis.Api
                 var error = new Error
                 {
                     Code = 10,
-                    Message = $"The field '{fieldName}' doesn't expects the value '{value}' in it's array. Only '{allowed}' allowed.",
+                    Message = $"The field '{fieldName.ToLowerInvariant()}' doesn't expects the value '{value}' in it's array. Only '{allowed}' allowed.",
                     Values = new
                     {
-                        Field = fieldName
+                        Field = fieldName.ToLowerInvariant()
                     }
                 };
                 Result.Errors.Add(error);
@@ -80,10 +80,10 @@ namespace Lisa.Excelsis.Api
                     var error = new Error
                     {
                         Code = 10,
-                        Message = $"The field '{fieldName}' doesn't expects the value '{val}' in it's array. Only {allowed} allowed.",
+                        Message = $"The field '{fieldName.ToLowerInvariant()}' doesn't expects the value '{val}' in it's array. Only {allowed} allowed.",
                         Values = new
                         {
-                            Field = fieldName
+                            Field = fieldName.ToLowerInvariant()
                         }
                     };
                     Result.Errors.Add(error);
