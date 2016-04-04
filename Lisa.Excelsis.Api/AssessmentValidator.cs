@@ -22,6 +22,7 @@ namespace Lisa.Excelsis.Api
         {
             string[] expectedValues;
             string allowed;
+
             if (fieldName.ToLower() == "observations")
             {
                 expectedValues = new string[] { "seen", "not seen", "not rated" };
@@ -63,6 +64,7 @@ namespace Lisa.Excelsis.Api
                 Result.Errors.Add(error);
                 return;
             }
+
             foreach(string val in (JArray)value)
             {
                 bool expected = false;
@@ -92,9 +94,9 @@ namespace Lisa.Excelsis.Api
         {
             Ignore("id");
             Optional("studentName", NotEmpty);
-            Optional("studentNumber", NotEmpty);
-            Optional("crebo", NotEmpty);
-            Optional("cohort", NotEmpty);
+            Optional("studentNumber", NotEmpty, Length(8));
+            Optional("crebo", NotEmpty, Length(5));
+            Optional("cohort", NotEmpty, Length(4));
             Required("examSubject", NotEmpty);
             Required("examName", NotEmpty);
             Optional("assessors", NotEmpty);
