@@ -94,7 +94,7 @@ namespace Lisa.Excelsis.Api
         {
             Ignore("id");
             Optional("studentName", NotEmpty);
-            Optional("studentNumber", NotEmpty, Length(8));
+            Optional("studentNumber", NotEmpty);
             Optional("crebo", NotEmpty, Length(5));
             Optional("cohort", NotEmpty, Length(4));
             Required("examSubject", NotEmpty);
