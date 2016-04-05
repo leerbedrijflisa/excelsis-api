@@ -13,6 +13,13 @@ namespace Lisa.Excelsis.Api
             _db = database;
         }
 
+        [HttpGet]
+        public async Task<ActionResult> Get()
+        {
+            var assessments = await _db.FetchAssessments();
+            return new HttpOkObjectResult(assessments);
+        }
+
         [HttpGet("{id}", Name = "getSingle")]
         public async Task<ActionResult> Get(Guid id)
         {
