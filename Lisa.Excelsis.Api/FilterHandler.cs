@@ -1,5 +1,6 @@
 ﻿using Lisa.Common.WebApi;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Lisa.Excelsis.Api
 {
@@ -8,71 +9,45 @@ namespace Lisa.Excelsis.Api
         public static IEnumerable<DynamicModel> filterAssessments(IEnumerable<DynamicModel> assessments, IEnumerable<Filter> filters)
         {
             var result = new List<DynamicModel>();
-            foreach (dynamic assessment in assessments)
+            var filterValues = new List<Filter>();
+
+            foreach (Filter filter in filters)
             {
-                foreach (Filter filter in filters)
+                if (filter.Type == "StudentName")
                 {
-                    if (filter.Type == "StudentName")
+                    if (filter.Value.Contains(","))
                     {
-
-                        if (filter.Value.Contains("+") )
-                        {
-                            return null;
-                        }
-
-                        if (filter.Value.Contains(","))
-                        {
-                            var studentNames = filter.Value.Split(',');
-                            foreach (var studentName in studentNames)
-                            {
-                                if (studentName.ToLower() == assessment.StudentName.ToLower())
-                                {
-                                    result.Add(assessment);
-                                    break;
-                                }
-                            }
-                        }
-
-                        //you should be to filter on multiple students
-                        if (assessment.StudentName.ToLower() == filter.Value.ToLower())
-                        {
-                            result.Add(assessment);
-                            break;
-                        }
+                        var studentNames = filter.Value.Split(',');
+                        filterValues.Add(new Filter("StudentName", studentNames.ToString()));
                     }
-                    if (filter.Type == "Assessors")
+                    else
                     {
-                        if (filter.Value.Contains(","))
-                        {
-                            var assessorNames = filter.Value.Split(',');
-                            foreach (var assessorName in assessorNames)
-                            {
-                                if (assessment.Assessors.Contains(assessorName))
-                                {
-                                    result.Add(assessment);
-                                    break;
-                                }
-                            }
-                        }
-
-                        if (filter.Value.Contains(";"))
-                        {
-                            string[] assessorNames = filter.Value.Split(';');
-                            if (assessment.Assessors.Any(assessorNames.Contains))
-                            {
-                                result.Add(assessment);
-                                break;
-                            }
-                        }
-                        
-                        if (assessment.Assessors.ToLower().Contains(filter.Value.ToLower()))
-                        {
-
-                            result.Add(assessment);
-                            break;
-                        }
+                        filterValues.Add(new Filter("StudentName", filter.Value));
                     }
                 }
+
+                if (filter.Type == "Assessors")
+                {
+                    if (filter.Value.Contains(","))
+                    {
+                        string[] assessorNames = filter.Value.Split(',');
+                        filterValues.Add(new Filter("Assessors,OR", assessorNames.ToString()));
+                    }
+                    else if (filter.Value.Contains(";"))
+                    {
+                        string[] assessorNames = filter.Value.Split(';');
+                        filterValues.Add(new Filter("Assessors,AND", assessorNames.ToString()));
+                    }
+                    else
+                    {
+                        filterValues.Add(new Filter("Assessors,SINGLE", filter.Value));
+                    }
+                }
+            }
+
+            foreach (dynamic assessment in assessments)
+            {
+                string k = "m";
             }
             
             return result;
