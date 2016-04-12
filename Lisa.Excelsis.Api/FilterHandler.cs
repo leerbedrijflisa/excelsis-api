@@ -1,4 +1,5 @@
 ﻿using Lisa.Common.WebApi;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -17,8 +18,8 @@ namespace Lisa.Excelsis.Api
                 {
                     if (filter.Value.Contains(","))
                     {
-                        var studentNames = filter.Value.Split(',');
-                        filterValues.Add(new Filter("StudentName", studentNames.ToString()));
+                        string studentNames = JsonConvert.SerializeObject(filter.Value.Split(','));
+                        filterValues.Add(new Filter("StudentName", studentNames));
                     }
                     else
                     {
@@ -30,13 +31,13 @@ namespace Lisa.Excelsis.Api
                 {
                     if (filter.Value.Contains(","))
                     {
-                        string[] assessorNames = filter.Value.Split(',');
-                        filterValues.Add(new Filter("Assessors,OR", assessorNames.ToString()));
+                        string assessorNames = JsonConvert.SerializeObject(filter.Value.Split(','));
+                        filterValues.Add(new Filter("Assessors,OR", assessorNames));
                     }
                     else if (filter.Value.Contains(";"))
                     {
-                        string[] assessorNames = filter.Value.Split(';');
-                        filterValues.Add(new Filter("Assessors,AND", assessorNames.ToString()));
+                        string assessorNames = JsonConvert.SerializeObject(filter.Value.Split(';'));
+                        filterValues.Add(new Filter("Assessors,AND", assessorNames));
                     }
                     else
                     {
@@ -47,7 +48,7 @@ namespace Lisa.Excelsis.Api
 
             foreach (dynamic assessment in assessments)
             {
-                string k = "m";
+                string k = "m"; 
             }
             
             return result;
