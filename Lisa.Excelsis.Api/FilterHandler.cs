@@ -1,7 +1,6 @@
 ﻿using Lisa.Common.WebApi;
 using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Lisa.Excelsis.Api
 {
@@ -19,7 +18,7 @@ namespace Lisa.Excelsis.Api
                     if (filter.Value.Contains(","))
                     {
                         string studentNames = JsonConvert.SerializeObject(filter.Value.Split(','));
-                        filterValues["StudentName"] = new Filter("ARRAY", studentNames);
+                        filterValues["StudentName"] = new Filter("OR", studentNames);
                     }
                     else
                     {
@@ -44,6 +43,11 @@ namespace Lisa.Excelsis.Api
                         filterValues["Assessors"] = new Filter("SINGLE", filter.Value);
                     }
                 }
+
+                if (filter.Type == "Exam")
+                {
+                    filterValues["Exam"] = new Filter("SINGLE", filter.Value);
+                }
             }
 
             foreach (dynamic assessment in assessments)
@@ -51,7 +55,14 @@ namespace Lisa.Excelsis.Api
                 int addToResult = 0;
                 if (filterValues.ContainsKey("StudentName"))
                 {
-                    //if studentname == filtervalue studentname add to result
+                    if (StudentNameCheck(filterValues["StudentName"], assessment))
+                    {
+                        addToResult = 1;
+                    }
+                    else
+                    {
+                        addToResult = 2;
+                    }
                 }
 
                 if (filterValues.ContainsKey("Assessors") && addToResult != 2)
@@ -60,6 +71,22 @@ namespace Lisa.Excelsis.Api
                     if (AssessorsCheck(filterValues["Assessors"], assessment))
                     {
                         addToResult = 1;
+                    }
+                    else
+                    {
+                        addToResult = 2;
+                    }
+                }
+
+                if (filterValues.ContainsKey("Exam") && addToResult != 2)
+                {
+                    if (assessment.ExamSubject.ToLower().Contains(filterValues["Exam"].Value.ToLower()) || assessment.ExamName.ToLower().Contains(filterValues["Exam"].Value.ToLower()))
+                    {
+                        addToResult = 1;
+                    }
+                    else
+                    {
+                        addToResult = 2;
                     }
                 }
 
@@ -115,9 +142,23 @@ namespace Lisa.Excelsis.Api
 
         public static bool StudentNameCheck(Filter studentName, dynamic assessment)
         {
-            if (studentName.Type == "ARRAY")
+            if (studentName.Type == "OR")
             {
-                
+                var studentNamesArray = JsonConvert.DeserializeObject<List<string>>(studentName.Value);
+                foreach (var item in studentNamesArray)
+                {
+                    if (assessment.StudentName.ToLower() == item.ToLower())
+                    {
+                        return true;
+                    }
+                }
+            }
+            else if (studentName.Type == "SINGLE")
+            {
+                if (assessment.StudentName.ToLower() == studentName.Value.ToLower())
+                {
+                    return true;
+                }
             }
             return false;
         }
