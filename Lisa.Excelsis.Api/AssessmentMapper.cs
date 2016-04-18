@@ -31,7 +31,7 @@ namespace Lisa.Excelsis.Api
                 entity.Assessed = model.Assessed;
                 entity.Observations = JsonConvert.SerializeObject(model.Observations);
                 entity.Norm = JsonConvert.SerializeObject(model.Norm);
-                entity.Ratings = JsonConvert.SerializeObject(model.Ratings);
+                entity.Criteria = JsonConvert.SerializeObject(model.Criteria);
 
                 entity.RowKey = entity.Id.ToString();
                 entity.PartitionKey = "";
