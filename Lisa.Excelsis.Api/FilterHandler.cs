@@ -35,6 +35,7 @@ namespace Lisa.Excelsis.Api
                     }
                     else if (filter.Value.Contains(";"))
                     {
+                        var k = filter.Value.Split(';');
                         string assessorNames = JsonConvert.SerializeObject(filter.Value.Split(';'));
                         filterValues["Assessors"] = new Filter("AND", assessorNames);
                     }
@@ -67,7 +68,6 @@ namespace Lisa.Excelsis.Api
 
                 if (filterValues.ContainsKey("Assessors") && addToResult != 2)
                 {
-                    addToResult = 0;
                     if (AssessorsCheck(filterValues["Assessors"], assessment))
                     {
                         addToResult = 1;
