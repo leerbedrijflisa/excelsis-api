@@ -17,22 +17,13 @@ namespace Lisa.Excelsis.Api
             Allow("assessors");
             Allow("assessed");
             Allow("observations");
+            Allow("criteria");
         }
         private void ValidateList(string fieldName, object value)
         {
-            string[] expectedValues;
             string allowed;
-
-            if (fieldName.ToLower() == "observations")
-            {
-                expectedValues = new string[] { "seen", "not seen", "not rated" };
-                allowed = "seen, not seen and not rated";
-            }
-            else
-            {
-                expectedValues = new string[] { "excellent", "pass", "fail" };
-                allowed = "excellent, pass and fail";
-            }
+            string[] expectedValues = new string[] { "seen", "not seen", "not rated" };
+            allowed = "seen, not seen and not rated";
 
             if ((value == null) ||
                 (value is JArray) && ((JArray)value).Count == 0)
@@ -103,7 +94,7 @@ namespace Lisa.Excelsis.Api
             Optional("assessed", NotEmpty);
             Optional("observations", ValidateList);
             Required("norm", NotEmpty);
-            Required("ratings", ValidateList);
+            Required("criteria", NotEmpty);
         }
     }
 }
