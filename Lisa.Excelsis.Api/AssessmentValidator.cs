@@ -1,5 +1,4 @@
 ﻿using Lisa.Common.WebApi;
-using Newtonsoft.Json.Linq;
 
 namespace Lisa.Excelsis.Api
 {
@@ -27,13 +26,23 @@ namespace Lisa.Excelsis.Api
             Optional("student.number", NotEmpty);
             Optional("crebo", NotEmpty, Length(5));
             Optional("cohort", NotEmpty, Length(4));
-            Required("subject", NotEmpty);
-            Required("exam", NotEmpty);
-            Optional("assessors", NotEmpty);
+            Required("examSubject", NotEmpty);
+            Required("examName", NotEmpty);
+            //Optional("assessors", NotEmpty, IsArray(DataTypes.Object));
+            Required("assessors.firstName", NotEmpty, TypeOf(DataTypes.String));
+            Optional("assessors.lastName", NotEmpty, TypeOf(DataTypes.String));
+            Optional("assessors.userName", NotEmpty, TypeOf(DataTypes.String));
+            Optional("assessors.teacherCode", NotEmpty, TypeOf(DataTypes.String));
             Optional("assessed", NotEmpty);
-            Optional("observations", NotEmpty);
-            Required("norm", NotEmpty);
-            Required("criteria", NotEmpty);
+            Optional("observations.value", NotEmpty, TypeOf(DataTypes.String));
+            Optional("observations.remark", NotEmpty, TypeOf(DataTypes.String));
+            Optional("observations.markings", NotEmpty, TypeOf(DataTypes.Array));
+            Required("norm.excellent", NotEmpty, IsArray(DataTypes.Number));
+            Required("norm.pass", NotEmpty, IsArray(DataTypes.Number));
+            Required("norm.fail", NotEmpty, IsArray(DataTypes.Number));
+            Required("criteria.description", NotEmpty, TypeOf(DataTypes.String));
+            Required("criteria.details", NotEmpty, TypeOf(DataTypes.String));
+            Required("criteria.rating", NotEmpty, TypeOf(DataTypes.String));
         }
     }
 }
