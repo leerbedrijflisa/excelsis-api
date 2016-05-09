@@ -29,7 +29,7 @@ namespace Lisa.Excelsis.Api
             Required("examSubject", NotEmpty);
             Required("examName", NotEmpty);
             //Optional("assessors", NotEmpty, IsArray(DataTypes.Object));
-            Required("assessors.firstName", NotEmpty, TypeOf(DataTypes.String));
+            Optional("assessors.firstName", NotEmpty, TypeOf(DataTypes.String));
             Optional("assessors.lastName", NotEmpty, TypeOf(DataTypes.String));
             Optional("assessors.userName", NotEmpty, TypeOf(DataTypes.String));
             Optional("assessors.teacherCode", NotEmpty, TypeOf(DataTypes.String));
