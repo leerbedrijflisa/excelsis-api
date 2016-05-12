@@ -34,15 +34,16 @@ namespace Lisa.Excelsis.Api
             Optional("assessors.userName", NotEmpty, TypeOf(DataTypes.String));
             Optional("assessors.teacherCode", NotEmpty, TypeOf(DataTypes.String));
             Optional("assessed", NotEmpty);
-            Optional("observations.value", NotEmpty, TypeOf(DataTypes.String));
+            Optional("observations.value", NotEmpty, TypeOf(DataTypes.String), OneOf("notRated", "notSeen", "seen"));
             Optional("observations.remark", NotEmpty, TypeOf(DataTypes.String));
-            Optional("observations.markings", NotEmpty, TypeOf(DataTypes.Array));
+            Optional("observations.markings", NotEmpty, IsArray(DataTypes.String));
+            Required("observations.criteria.description", NotEmpty, TypeOf(DataTypes.String));
+            Required("observations.criteria.details", NotEmpty, TypeOf(DataTypes.String));
+            Required("observations.criteria.rating", NotEmpty, TypeOf(DataTypes.String), OneOf("fail", "pass", "excellent"));
+            Required("observations.criteria.category", NotEmpty, TypeOf(DataTypes.String));
             Required("norm.excellent", NotEmpty, IsArray(DataTypes.Number));
             Required("norm.pass", NotEmpty, IsArray(DataTypes.Number));
             Required("norm.fail", NotEmpty, IsArray(DataTypes.Number));
-            Required("criteria.description", NotEmpty, TypeOf(DataTypes.String));
-            Required("criteria.details", NotEmpty, TypeOf(DataTypes.String));
-            Required("criteria.rating", NotEmpty, TypeOf(DataTypes.String));
         }
     }
 }
