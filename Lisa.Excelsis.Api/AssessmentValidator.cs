@@ -7,16 +7,15 @@ namespace Lisa.Excelsis.Api
         protected override void ValidatePatch()
         {
             Ignore("id");
-            Allow("studentName");
-            Allow("studentNumber");
+            Allow("student.name");
+            Allow("student.number");
             Allow("crebo");
             Allow("cohort");
-            Allow("examSubject");
-            Allow("examName");
+            Allow("subject");
+            Allow("exam");
             Allow("assessors");
             Allow("assessed");
             Allow("observations");
-            Allow("criteria");
         }
 
         protected override void ValidateModel()
@@ -26,8 +25,8 @@ namespace Lisa.Excelsis.Api
             Optional("student.number", NotEmpty);
             Optional("crebo", NotEmpty, Length(5));
             Optional("cohort", NotEmpty, Length(4));
-            Required("examSubject", NotEmpty);
-            Required("examName", NotEmpty);
+            Required("subject", NotEmpty);
+            Required("exam", NotEmpty);
             //Optional("assessors", NotEmpty, IsArray(DataTypes.Object));
             Optional("assessors.firstName", NotEmpty, TypeOf(DataTypes.String));
             Optional("assessors.lastName", NotEmpty, TypeOf(DataTypes.String));
