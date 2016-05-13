@@ -1,9 +1,31 @@
 ﻿using Lisa.Common.WebApi;
+using System.Linq;
 
 namespace Lisa.Excelsis.Api
 {
     public class AssessmentValidator : Validator
     {
+        private void CheckDigits(string fieldName, object value)
+        {
+            
+            bool digitsOnly = value.ToString().All(char.IsDigit);
+            if (!digitsOnly)
+            {
+                var error = new Error
+                {
+                    Code = 10,
+                    Message = $"The field '{fieldName}' doesn't expects the value '{value.ToString()}' to have characters. Only numbers are allowed.",
+                    Values = new
+                    {
+                        Field = fieldName,
+                        Value = value.ToString(),
+                        Allowed = "Numbers"
+                    }
+                };
+                Result.Errors.Add(error);
+            }
+        }
+
         protected override void ValidatePatch()
         {
             Ignore("id");
@@ -23,8 +45,8 @@ namespace Lisa.Excelsis.Api
             Ignore("id");
             Optional("student.name", NotEmpty, TypeOf(DataTypes.String));
             Optional("student.number", NotEmpty, TypeOf(DataTypes.String));
-            Optional("crebo", NotEmpty, Length(5), TypeOf(DataTypes.String));
-            Optional("cohort", NotEmpty, Length(4), TypeOf(DataTypes.String));
+            Optional("crebo", CheckDigits, NotEmpty, Length(5), TypeOf(DataTypes.String));
+            Optional("cohort", CheckDigits, NotEmpty, Length(4), TypeOf(DataTypes.String));
             Required("subject", NotEmpty, TypeOf(DataTypes.String));
             Required("exam", NotEmpty, TypeOf(DataTypes.String));
             //Optional("assessors", NotEmpty, IsArray(DataTypes.Object));
