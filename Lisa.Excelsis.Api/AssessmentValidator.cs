@@ -21,12 +21,12 @@ namespace Lisa.Excelsis.Api
         protected override void ValidateModel()
         {
             Ignore("id");
-            Optional("student.name", NotEmpty);
-            Optional("student.number", NotEmpty);
-            Optional("crebo", NotEmpty, Length(5));
-            Optional("cohort", NotEmpty, Length(4));
-            Required("subject", NotEmpty);
-            Required("exam", NotEmpty);
+            Optional("student.name", NotEmpty, TypeOf(DataTypes.String));
+            Optional("student.number", NotEmpty, TypeOf(DataTypes.String));
+            Optional("crebo", NotEmpty, Length(5), TypeOf(DataTypes.String));
+            Optional("cohort", NotEmpty, Length(4), TypeOf(DataTypes.String));
+            Required("subject", NotEmpty, TypeOf(DataTypes.String));
+            Required("exam", NotEmpty, TypeOf(DataTypes.String));
             //Optional("assessors", NotEmpty, IsArray(DataTypes.Object));
             Optional("assessors.firstName", NotEmpty, TypeOf(DataTypes.String));
             Optional("assessors.lastName", NotEmpty, TypeOf(DataTypes.String));
