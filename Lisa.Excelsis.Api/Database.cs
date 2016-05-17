@@ -71,6 +71,12 @@ namespace Lisa.Excelsis.Api
             await table.ExecuteAsync(query);
         }
 
+        public async Task DeleteAssessments()
+        {
+            CloudTable table = await Connect();
+            await table.DeleteAsync();
+        }
+
         private TableStorageSettings _settings;
     }
 }

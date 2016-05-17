@@ -80,6 +80,13 @@ namespace Lisa.Excelsis.Api
             return new HttpOkObjectResult(assessment);
         }
 
+        [HttpDelete]
+        public async Task<ActionResult> Delete()
+        {
+            await _db.DeleteAssessments();
+            return new HttpStatusCodeResult(204);
+        }
+
         private Database _db;
     }
 }
