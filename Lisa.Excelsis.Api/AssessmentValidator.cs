@@ -7,25 +7,25 @@ namespace Lisa.Excelsis.Api
     {
         private void CheckDigits(string fieldName, object value)
         {
-            
-            bool digitsOnly = value.ToString().All(char.IsDigit);
+            string valueString = value.ToString();
+            bool digitsOnly = valueString.All(char.IsDigit);
             if (!digitsOnly)
             {
                 var error = new Error
                 {
                     Code = 10,
-                    Message = $"The field '{fieldName}' doesn't expects the value '{value.ToString()}' to have characters. Only numbers are allowed.",
+                    Message = $"The field '{fieldName}' doesn't expects the value '{valueString}' to have characters. Only numbers are allowed.",
                     Values = new
                     {
                         Field = fieldName,
-                        Value = value.ToString(),
+                        Value = valueString,
                         Allowed = "Numbers"
                     }
                 };
                 Result.Errors.Add(error);
             }
         }
-
+         
         protected override void ValidatePatch()
         {
             Ignore("id");
