@@ -41,6 +41,21 @@ namespace Lisa.Excelsis.Api
             return results;
         }
 
+        public async Task<DynamicModel> FetchAssessor(string userName)
+        {
+            CloudTable table = await Connect("Assessors");
+            var query = TableOperation.Retrieve<DynamicEntity>("", userName);
+            var assessor = await table.ExecuteAsync(query);
+
+            if (assessor.Result == null)
+            {
+                return null;
+            }
+            var results = AssessorMapper.ToModel(assessor.Result);
+
+            return results;
+        }
+
         public async Task<IEnumerable<DynamicModel>> FetchAssessors()
         {
             CloudTable table = await Connect("Assessors");

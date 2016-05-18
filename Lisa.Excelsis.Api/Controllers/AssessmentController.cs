@@ -2,10 +2,12 @@
 using System.Threading.Tasks;
 using Lisa.Common.WebApi;
 using Microsoft.AspNet.Mvc;
+using Microsoft.AspNet.Authorization;
 
 namespace Lisa.Excelsis.Api
 {
     [Route("assessments")]
+    [Authorize("Bearer")]
     public class AssessmentController : Controller
     {
         public AssessmentController(Database database)
