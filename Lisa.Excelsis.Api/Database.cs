@@ -43,7 +43,7 @@ namespace Lisa.Excelsis.Api
 
         public async Task<IEnumerable<DynamicModel>> FetchAssessors()
         {
-            CloudTable table = await Connect("Assessments");
+            CloudTable table = await Connect("Assessors");
             var query = new TableQuery<DynamicEntity>();
             var assessorsToMap = await table.ExecuteQuerySegmentedAsync(query, null);
             var assessors = assessorsToMap.Select(a => AssessorMapper.ToModel(a));

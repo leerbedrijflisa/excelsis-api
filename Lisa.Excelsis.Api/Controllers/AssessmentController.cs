@@ -53,7 +53,7 @@ namespace Lisa.Excelsis.Api
         }
 
         [HttpPatch("{id}")]
-        public async Task<IActionResult> Patch(Guid id, [FromBody] Patch[] patches)
+        public async Task<ActionResult> Patch(Guid id, [FromBody] Patch[] patches)
         {
             if (patches == null)
             {
