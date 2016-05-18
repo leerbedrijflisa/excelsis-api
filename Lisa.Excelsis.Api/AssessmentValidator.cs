@@ -58,10 +58,10 @@ namespace Lisa.Excelsis.Api
             Optional("observations.value", NotEmpty, TypeOf(DataTypes.String), OneOf("notRated", "notSeen", "seen"));
             Optional("observations.remark", NotEmpty, TypeOf(DataTypes.String));
             Optional("observations.markings", NotEmpty, IsArray(DataTypes.String));
-            Required("observations.criteria.description", NotEmpty, TypeOf(DataTypes.String));
-            Required("observations.criteria.details", NotEmpty, TypeOf(DataTypes.String));
-            Required("observations.criteria.rating", NotEmpty, TypeOf(DataTypes.String), OneOf("fail", "pass", "excellent"));
-            Required("observations.criteria.category", NotEmpty, TypeOf(DataTypes.String));
+            Required("observations.criterion.description", NotEmpty, TypeOf(DataTypes.String));
+            Required("observations.criterion.details", NotEmpty, TypeOf(DataTypes.String));
+            Required("observations.criterion.rating", NotEmpty, TypeOf(DataTypes.String), OneOf("fail", "pass", "excellent"));
+            Required("observations.criterion.category", NotEmpty, TypeOf(DataTypes.String));
             Required("norm.excellent", NotEmpty, IsArray(DataTypes.Number));
             Required("norm.pass", NotEmpty, IsArray(DataTypes.Number));
             Required("norm.fail", NotEmpty, IsArray(DataTypes.Number));
