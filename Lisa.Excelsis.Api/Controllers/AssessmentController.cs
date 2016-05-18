@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Lisa.Common.WebApi;
 using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.Authorization;
+using System.Security.Principal;
 
 namespace Lisa.Excelsis.Api
 {
@@ -42,7 +43,7 @@ namespace Lisa.Excelsis.Api
             {
                 return new BadRequestResult();
             }
-
+            
             var validationResult = new AssessmentValidator().Validate(assessment);
             if (validationResult.HasErrors)
             {
@@ -90,5 +91,6 @@ namespace Lisa.Excelsis.Api
         }
 
         private Database _db;
+        private IIdentity _user { get { return HttpContext.User.Identity; } }
     }
 }

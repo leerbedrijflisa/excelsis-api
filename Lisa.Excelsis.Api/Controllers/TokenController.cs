@@ -18,8 +18,6 @@ namespace Lisa.Excelsis.Api
         public TokenController(TokenAuthOptions tokenOptions, Database db)
         {
             this.tokenOptions = tokenOptions;
-            //this.bearerOptions = options.Value;
-            //this.signingCredentials = signingCredentials;
             _db = db;
         }
 

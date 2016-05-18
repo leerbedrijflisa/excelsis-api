@@ -8,6 +8,9 @@ using System.IdentityModel.Tokens;
 using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Authentication.JwtBearer;
 using System;
+using Newtonsoft.Json;
+using Microsoft.AspNet.Diagnostics;
+using Microsoft.AspNet.Http;
 
 namespace Lisa.Excelsis.Api
 {
@@ -72,6 +75,35 @@ namespace Lisa.Excelsis.Api
 
         public void Configure(IApplicationBuilder app)
         {
+            app.UseExceptionHandler(appBuilder =>
+            {
+                appBuilder.Use(async (context, next) =>
+                {
+                    var error = context.Features[typeof(IExceptionHandlerFeature)] as IExceptionHandlerFeature;
+                    // This should be much more intelligent - at the moment only expired 
+                    // security tokens are caught - might be worth checking other possible 
+                    // exceptions such as an invalid signature.
+                    if (error != null && error.Error is SecurityTokenExpiredException)
+                    {
+                        context.Response.StatusCode = 401;
+                        // What you choose to return here is up to you, in this case a simple 
+                        // bit of JSON to say you're no longer authenticated.
+                        context.Response.ContentType = "application/json";
+                    }
+                    else if (error != null && error.Error != null)
+                    {
+                        context.Response.StatusCode = 401;
+                        context.Response.ContentType = "application/json";
+                    }
+                    // We're not trying to handle anything else so just let the default 
+                    // handler handle.
+                    else
+                    {
+                        await next();
+                    }
+                });
+            });
+
             app.UseJwtBearerAuthentication(options =>
             {
                 // Basic settings - signing key to validate with, audience and issuer.
