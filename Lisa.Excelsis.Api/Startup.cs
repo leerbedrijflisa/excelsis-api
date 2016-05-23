@@ -8,9 +8,7 @@ using System.IdentityModel.Tokens;
 using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Authentication.JwtBearer;
 using System;
-using Newtonsoft.Json;
 using Microsoft.AspNet.Diagnostics;
-using Microsoft.AspNet.Http;
 
 namespace Lisa.Excelsis.Api
 {

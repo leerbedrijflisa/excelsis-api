@@ -14,7 +14,7 @@ namespace Lisa.Excelsis.Api
     public class AuthRequest
     {
         [Required]
-        public string username { get; set; }
+        public string userName { get; set; }
     }
 
     public class TokenResponse

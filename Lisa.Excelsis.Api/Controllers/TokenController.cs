@@ -6,6 +6,7 @@ using System.Security.Principal;
 using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Mvc;
 using System.Threading.Tasks;
+using Lisa.Common.WebApi;
 
 namespace Lisa.Excelsis.Api
 {
@@ -72,17 +73,19 @@ namespace Lisa.Excelsis.Api
                 return new HttpStatusCodeResult(422);
             }
 
-            if (await _db.FetchAssessor(req.username) == null)
+            if (await _db.FetchAssessor(req.userName) == null)
             {
-                return new HttpUnauthorizedResult();
+                var error = new List<object>();
+                error.Add(new { error = $"User '{req.userName}' doesn't exist.", userName = req.userName, value = "Not found" });
+                return new UnprocessableEntityObjectResult(error);
             }
 
             DateTime? expires = DateTime.UtcNow.AddHours(2);
-            var token = await GetToken(req.username, expires);
+            var token = await GetToken(req.userName, expires);
 
             var tokenResponse = new TokenResponse
             {
-                user = req.username,
+                user = req.userName,
                 token = token,
                 tokenExpires = expires
             };
