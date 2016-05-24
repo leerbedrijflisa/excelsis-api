@@ -3,10 +3,10 @@ using System.Threading.Tasks;
 using Lisa.Common.TableStorage;
 using Lisa.Common.WebApi;
 using Microsoft.Extensions.OptionsModel;
-using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Table;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.WindowsAzure.Storage.Table;
+using Microsoft.WindowsAzure.Storage;
 
 namespace Lisa.Excelsis.Api
 {

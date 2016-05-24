@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Lisa.Common.WebApi;
-using Microsoft.AspNet.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNet.Authorization;
 using System.Security.Principal;
 
@@ -20,7 +20,7 @@ namespace Lisa.Excelsis.Api
         public async Task<ActionResult> Get()
         {
             var assessments = await _db.FetchAssessments();
-            return new HttpOkObjectResult(assessments);
+            return new OkObjectResult(assessments);
         }
 
         [HttpGet("{id}", Name = "getSingle")]
@@ -30,10 +30,10 @@ namespace Lisa.Excelsis.Api
 
             if (result == null)
             {
-                return new HttpNotFoundResult();
+                return new NotFoundResult();
             }
 
-            return new HttpOkObjectResult(result);
+            return new OkObjectResult(result);
         }
 
         [HttpPost]
@@ -67,7 +67,7 @@ namespace Lisa.Excelsis.Api
 
             if (assessment == null)
             {
-                return new HttpNotFoundResult();
+                return new NotFoundResult();
             }
             var validationResult = new AssessmentValidator().Validate(patches, assessment);
             if (validationResult.HasErrors)
@@ -80,14 +80,14 @@ namespace Lisa.Excelsis.Api
             patcher.Apply(patches, assessment);
 
             await _db.PatchAssessment(assessment);
-            return new HttpOkObjectResult(assessment);
+            return new OkObjectResult(assessment);
         }
 
         [HttpDelete]
         public async Task<ActionResult> Delete()
         {
             await _db.DeleteAssessments();
-            return new HttpStatusCodeResult(204);
+            return new StatusCodeResult(204);
         }
 
         private Database _db;

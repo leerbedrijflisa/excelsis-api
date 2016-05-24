@@ -1,6 +1,7 @@
-﻿using System;
+﻿using Microsoft.IdentityModel.Tokens;
+using System;
 using System.ComponentModel.DataAnnotations;
-using System.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace Lisa.Excelsis.Api
 {

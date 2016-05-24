@@ -14,10 +14,12 @@
         "Hosting:Environment": "Development"
       }
     },
-    "web": {
-      "commandName": "web",
+    "Lisa.Excelsis.Api": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "http://localhost:31415",
       "environmentVariables": {
-        "Hosting:Environment": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development"
       }
     }
   }

@@ -2,6 +2,7 @@
 using System.Security.Cryptography;
 using Newtonsoft.Json;
 using System.IdentityModel.Tokens;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Lisa.Excelsis.Api
 {
@@ -54,8 +55,7 @@ namespace Lisa.Excelsis.Api
             var keyParams = JsonConvert.DeserializeObject<RSAParametersWithPrivate>(File.ReadAllText(file));
             return keyParams.ToRSAParameters();
         }
-
-
+        
         public static RsaSecurityKey GetRSAKey()
         {
             if (!File.Exists("rsa.json"))

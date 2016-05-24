@@ -1,14 +1,14 @@
-﻿using Microsoft.AspNet.Builder;
-using Microsoft.AspNet.Hosting;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Serialization;
 using System.Security.Cryptography;
-using System.IdentityModel.Tokens;
-using Microsoft.AspNet.Authorization;
-using Microsoft.AspNet.Authentication.JwtBearer;
-using System;
-using Microsoft.AspNet.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Diagnostics;
+using System.IO;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace Lisa.Excelsis.Api
 {
@@ -17,6 +17,7 @@ namespace Lisa.Excelsis.Api
         public Startup(IHostingEnvironment environment)
         {
             var builder = new ConfigurationBuilder()
+                .SetBasePath(environment.ContentRootPath)
                 .AddJsonFile("appsettings.json")
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
@@ -31,6 +32,7 @@ namespace Lisa.Excelsis.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
+            
 
             // Replace this with some sort of loading from config / file.
             RSAParameters keyParams = RSAKeyUtils.GetRandomKey();
@@ -49,7 +51,7 @@ namespace Lisa.Excelsis.Api
 
             // Save the token options into an instance so they're accessible to the 
             // controller.
-            services.AddInstance<TokenAuthOptions>(tokenOptions);
+            //services.AddInstance<TokenAuthOptions>(tokenOptions);
 
             // Enable the use of an [Authorize("Bearer")] attribute on methods and
             // classes to protect.
@@ -59,7 +61,6 @@ namespace Lisa.Excelsis.Api
                     .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme‌​)
                     .RequireAuthenticatedUser().Build());
             });
-            services.AddOptions();
             services.Configure<TableStorageSettings>(Configuration.GetSection("TableStorage"));
             services.AddMvc().AddJsonOptions(opts =>
             {
@@ -102,7 +103,7 @@ namespace Lisa.Excelsis.Api
                 });
             });
 
-            app.UseJwtBearerAuthentication(options =>
+            /*app.UseJwtBearerAuthentication(options =>
             {
                 // Basic settings - signing key to validate with, audience and issuer.
                 options.TokenValidationParameters.IssuerSigningKey = key;
@@ -121,9 +122,9 @@ namespace Lisa.Excelsis.Api
                 // time, this can be set to zero. Where external tokens are used, some leeway here 
                 // could be useful.
                 options.TokenValidationParameters.ClockSkew = TimeSpan.Zero;
-            });
-
-            app.UseIISPlatformHandler();
+            });*/
+            
+            app.UseApplicationInsightsExceptionTelemetry();
             app.UseCors(cors =>
             {
                 cors.AllowAnyOrigin()
@@ -133,6 +134,16 @@ namespace Lisa.Excelsis.Api
             app.UseMvc();
         }
 
-        public static void Main(string[] args) => WebApplication.Run<Startup>(args);
+        public static void Main(string[] args)
+        {
+           var host = new WebHostBuilder()
+             .UseKestrel()
+             .UseContentRoot(Directory.GetCurrentDirectory())
+             .UseIISIntegration()
+             .UseStartup<Startup>()
+             .Build();
+ 
+           host.Run();
+        }
     }
 }

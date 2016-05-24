@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Principal;
-using Microsoft.AspNet.Authorization;
-using Microsoft.AspNet.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Lisa.Common.WebApi;
+using Microsoft.IdentityModel.Tokens;
 
-namespace Lisa.Excelsis.Api
+/*namespace Lisa.Excelsis.Api
 {
     // https://github.com/mrsheepuk/ASPNETSelfCreatedTokenAuthExample
     [Route("token")]
@@ -57,7 +58,7 @@ namespace Lisa.Excelsis.Api
                 tokenExpires = tokenExpires
             };
 
-            return new HttpOkObjectResult(tokenResponse);
+            return new OkObjectResult(tokenResponse);
         }
 
         /// <summary>
@@ -70,13 +71,13 @@ namespace Lisa.Excelsis.Api
         {
             if (!ModelState.IsValid || req == null)
             {
-                return new HttpStatusCodeResult(422);
+                return new StatusCodeResult(422);
             }
 
             if (await _db.FetchAssessor(req.userName) == null)
             {
                 var error = new List<object>();
-                error.Add(new { error = $"User '{req.userName}' doesn't exist.", userName = req.userName, value = "Not found" });
+                error.Add(new { code = "2222", message = $"User '{req.userName}' doesn't exist.", values = new { userName = req.userName } });
                 return new UnprocessableEntityObjectResult(error);
             }
 
@@ -90,7 +91,7 @@ namespace Lisa.Excelsis.Api
                 tokenExpires = expires
             };
 
-            return new HttpOkObjectResult(tokenResponse);
+            return new OkObjectResult(tokenResponse);
         }
 
         /// <summary>
@@ -123,3 +124,4 @@ namespace Lisa.Excelsis.Api
         private Database _db;
     }
 }
+*/
