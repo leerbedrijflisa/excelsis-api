@@ -47,7 +47,7 @@ namespace Lisa.Excelsis.Api
             var validationResult = new AssessmentValidator().Validate(assessment);
             if (validationResult.HasErrors)
             {
-                return new UnprocessableEntityObjectResult(validationResult.Errors);
+                return new TempUnprocessableEntityObjectResult(validationResult.Errors);
             }
             dynamic result = await _db.PostAssessment(assessment);
             var location = Url.RouteUrl("getSingle", new { Id = result.Id }, Request.Scheme);
@@ -72,7 +72,7 @@ namespace Lisa.Excelsis.Api
             var validationResult = new AssessmentValidator().Validate(patches, assessment);
             if (validationResult.HasErrors)
             {
-                return new UnprocessableEntityObjectResult(validationResult.Errors);
+                return new TempUnprocessableEntityObjectResult(validationResult.Errors);
             }
 
             var patcher = new ModelPatcher();

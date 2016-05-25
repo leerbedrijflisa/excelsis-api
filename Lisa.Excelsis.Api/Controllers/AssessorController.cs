@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNet.Authorization;
-using Microsoft.AspNet.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace Lisa.Excelsis.Api
@@ -17,7 +17,7 @@ namespace Lisa.Excelsis.Api
         public async Task<ActionResult> Get()
         {
             var result = await _db.FetchAssessors();
-            return new HttpOkObjectResult(result);
+            return new OkObjectResult(result);
         }
 
         private Database _db;

@@ -1,14 +1,14 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json.Serialization;
-using System.Security.Cryptography;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.AspNetCore.Diagnostics;
+using Newtonsoft.Json.Serialization;
 using System.IO;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Security.Cryptography;
 
 namespace Lisa.Excelsis.Api
 {
@@ -28,12 +28,10 @@ namespace Lisa.Excelsis.Api
         private RsaSecurityKey key;
         private TokenAuthOptions tokenOptions;
 
-        public IConfigurationRoot Configuration { get; }
+        public IConfigurationRoot Configuration { get; set; }
 
         public void ConfigureServices(IServiceCollection services)
         {
-            
-
             // Replace this with some sort of loading from config / file.
             RSAParameters keyParams = RSAKeyUtils.GetRandomKey();
 
@@ -61,7 +59,7 @@ namespace Lisa.Excelsis.Api
                     .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme‌​)
                     .RequireAuthenticatedUser().Build());
             });
-            services.Configure<TableStorageSettings>(Configuration.GetSection("TableStorage"));
+            services.Configure<TableStorageSettings>(Options => Configuration.GetSection("TableStorage").Bind(Options));
             services.AddMvc().AddJsonOptions(opts =>
             {
                 opts.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
@@ -103,7 +101,7 @@ namespace Lisa.Excelsis.Api
                 });
             });
 
-            /*app.UseJwtBearerAuthentication(options =>
+            app.UseJwtBearerAuthentication(options =>
             {
                 // Basic settings - signing key to validate with, audience and issuer.
                 options.TokenValidationParameters.IssuerSigningKey = key;
@@ -122,7 +120,7 @@ namespace Lisa.Excelsis.Api
                 // time, this can be set to zero. Where external tokens are used, some leeway here 
                 // could be useful.
                 options.TokenValidationParameters.ClockSkew = TimeSpan.Zero;
-            });*/
+            });
             
             app.UseApplicationInsightsExceptionTelemetry();
             app.UseCors(cors =>
