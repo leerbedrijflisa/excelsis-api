@@ -24,29 +24,29 @@ namespace Lisa.Excelsis.Api
             Configuration = builder.Build();
         }
 
-        const string TokenAudience = "Excelsis";
-        const string TokenIssuer = "Excelsis";
-        private RsaSecurityKey key;
-        private TokenAuthOptions tokenOptions;
+        //const string TokenAudience = "Excelsis";
+        //const string TokenIssuer = "Excelsis";
+        //private RsaSecurityKey key;
+        //private TokenAuthOptions tokenOptions;
 
         public IConfigurationRoot Configuration { get; set; }
 
         public void ConfigureServices(IServiceCollection services)
         {
             // Replace this with some sort of loading from config / file.
-            RSAParameters keyParams = RSAKeyUtils.GetRandomKey();
+            //RSAParameters keyParams = RSAKeyUtils.GetRandomKey();
 
             // Create the key, and a set of token options to record signing credentials 
             // using that key, along with the other parameters we will need in the 
             // token controlller.
-            key = new RsaSecurityKey(keyParams);
-            tokenOptions = new TokenAuthOptions()
-            {
-                Audience = TokenAudience,
-                Issuer = TokenIssuer,
-                SigningCredentials = new SigningCredentials(key,
-                    SecurityAlgorithms.RsaSha256Signature)
-            };
+            //key = new RsaSecurityKey(keyParams);
+            //tokenOptions = new TokenAuthOptions()
+            //{
+            //    Audience = TokenAudience,
+            //    Issuer = TokenIssuer,
+            //    SigningCredentials = new SigningCredentials(key,
+            //        SecurityAlgorithms.RsaSha256Signature)
+            //};
 
             // Save the token options into an instance so they're accessible to the 
             // controller.
@@ -54,12 +54,12 @@ namespace Lisa.Excelsis.Api
 
             // Enable the use of an [Authorize("Bearer")] attribute on methods and
             // classes to protect.
-            services.AddAuthorization(auth =>
+            /*services.AddAuthorization(auth =>
             {
                 auth.AddPolicy("Bearer", new AuthorizationPolicyBuilder()
                     .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme‌​)
                     .RequireAuthenticatedUser().Build());
-            });
+            });*/
 
             // Assembly Microsoft.Extensions.OptionsModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60
             services.Configure<TableStorageSettings>(options => options = null);
@@ -75,7 +75,7 @@ namespace Lisa.Excelsis.Api
 
         public void Configure(IApplicationBuilder app)
         {
-            app.UseExceptionHandler(appBuilder =>
+            /*app.UseExceptionHandler(appBuilder =>
             {
                 appBuilder.Use(async (context, next) =>
                 {
@@ -102,9 +102,9 @@ namespace Lisa.Excelsis.Api
                         await next();
                     }
                 });
-            });
+            });*/
 
-            var options = new JwtBearerOptions();
+            /*var options = new JwtBearerOptions();
             // Basic settings - signing key to validate with, audience and issuer.
             options.TokenValidationParameters.IssuerSigningKey = key;
             options.TokenValidationParameters.ValidAudience = tokenOptions.Audience;
@@ -122,9 +122,11 @@ namespace Lisa.Excelsis.Api
             // time, this can be set to zero. Where external tokens are used, some leeway here 
             // could be useful.
             options.TokenValidationParameters.ClockSkew = TimeSpan.Zero;
-            app.UseJwtBearerAuthentication(options);
-            
-            
+            app.UseJwtBearerAuthentication(options);*/
+
+            app.UseApplicationInsightsRequestTelemetry();
+            app.UseApplicationInsightsExceptionTelemetry();
+
             app.UseCors(cors =>
             {
                 cors.AllowAnyOrigin()

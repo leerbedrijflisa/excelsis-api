@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 namespace Lisa.Excelsis.Api
 {
     [Route("assessors")]
-    [Authorize("Bearer")]
     public class AssessorController
     {
         public AssessorController(Database database)
