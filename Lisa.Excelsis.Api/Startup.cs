@@ -33,6 +33,9 @@ namespace Lisa.Excelsis.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddOptions();
+            services.AddApplicationInsightsTelemetry(Configuration);
+
             // Replace this with some sort of loading from config / file.
             //RSAParameters keyParams = RSAKeyUtils.GetRandomKey();
 
@@ -70,7 +73,7 @@ namespace Lisa.Excelsis.Api
 
             services.AddCors();
 
-            services.AddScoped<Database>();
+            //services.AddScoped<Database>();
         }
 
         public void Configure(IApplicationBuilder app)
@@ -123,8 +126,6 @@ namespace Lisa.Excelsis.Api
             // could be useful.
             options.TokenValidationParameters.ClockSkew = TimeSpan.Zero;
             app.UseJwtBearerAuthentication(options);*/
-
-            app.UseApplicationInsightsRequestTelemetry();
             app.UseApplicationInsightsExceptionTelemetry();
 
             app.UseCors(cors =>

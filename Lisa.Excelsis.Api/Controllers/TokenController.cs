@@ -30,7 +30,6 @@ namespace Lisa.Excelsis.Api
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [Authorize("Bearer")]
         public async Task<IActionResult> Get()
         {
             bool authenticated = false;
