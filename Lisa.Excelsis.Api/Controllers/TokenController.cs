@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using Lisa.Common.WebApi;
 using Microsoft.IdentityModel.Tokens;
 
-/*namespace Lisa.Excelsis.Api
+namespace Lisa.Excelsis.Api
 {
     // https://github.com/mrsheepuk/ASPNETSelfCreatedTokenAuthExample
     [Route("token")]
@@ -110,18 +110,16 @@ using Microsoft.IdentityModel.Tokens;
             claims.Add(new Claim(ClaimTypes.Name, user.UserName, ClaimValueTypes.String));
 
             var identity = new ClaimsIdentity(new GenericIdentity(user.UserName, "TokenAuth"), claims);
-
-            var securityToken = handler.CreateToken(
-                audience: tokenOptions.Audience,
-                issuer: tokenOptions.Issuer,
-                signingCredentials: tokenOptions.SigningCredentials,
-                subject: identity,
-                expires: expires
-                );
+            SecurityTokenDescriptor k = new SecurityTokenDescriptor();
+            k.Audience = tokenOptions.Audience;
+            k.Issuer = tokenOptions.Issuer;
+            k.SigningCredentials = tokenOptions.SigningCredentials;
+            k.Subject = identity;
+            k.Expires = expires;
+            var securityToken = handler.CreateToken(k);
             return handler.WriteToken(securityToken);
         }
 
         private Database _db;
     }
 }
-*/
