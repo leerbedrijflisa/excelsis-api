@@ -65,7 +65,7 @@ namespace Lisa.Excelsis.Api
             });*/
 
             // Assembly Microsoft.Extensions.OptionsModel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60
-            services.Configure<TableStorageSettings>(options => options = null);
+            services.Configure<TableStorageSettings>(Configuration.GetSection("TableStorage"));
             services.AddMvc().AddJsonOptions(opts =>
             {
                 opts.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
@@ -73,7 +73,7 @@ namespace Lisa.Excelsis.Api
 
             services.AddCors();
 
-            //services.AddScoped<Database>();
+            services.AddScoped<Database>();
         }
 
         public void Configure(IApplicationBuilder app)
