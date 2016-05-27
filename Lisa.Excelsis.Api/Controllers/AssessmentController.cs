@@ -8,6 +8,7 @@ using System.Security.Principal;
 namespace Lisa.Excelsis.Api
 {
     [Route("assessments")]
+    [Authorize("Bearer")]
     public class AssessmentController : Controller
     {
         public AssessmentController(Database database)
