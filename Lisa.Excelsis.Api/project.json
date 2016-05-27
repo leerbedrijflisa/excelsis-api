@@ -1,6 +1,13 @@
 {
   "buildOptions": {
-    "emitEntryPoint": true
+    "emitEntryPoint": true,
+    "preserveCompilationContext": true
+  },
+  "runtimeOptions": {
+    "gcServer": true
+  },
+  "scripts": {
+    "postpublish": [ "dotnet publish-iis --publish-folder %publish:OutputPath% --framework %publish:FullTargetFramework%" ]
   },
   "dependencies": {
     "Microsoft.AspNetCore.Authentication.JwtBearer": "1.0.0-rc2-final",
