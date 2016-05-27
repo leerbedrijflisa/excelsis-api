@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Lisa.Common.WebApi;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
 using System.Security.Principal;
 
 namespace Lisa.Excelsis.Api
@@ -46,7 +45,7 @@ namespace Lisa.Excelsis.Api
             var validationResult = new AssessmentValidator().Validate(assessment);
             if (validationResult.HasErrors)
             {
-                return new TempUnprocessableEntityObjectResult(validationResult.Errors);
+                return new UnprocessableEntityObjectResult(validationResult.Errors);
             }
             dynamic result = await _db.PostAssessment(assessment);
             var location = Url.RouteUrl("getSingle", new { Id = result.Id }, Request.Scheme);
@@ -71,7 +70,7 @@ namespace Lisa.Excelsis.Api
             var validationResult = new AssessmentValidator().Validate(patches, assessment);
             if (validationResult.HasErrors)
             {
-                return new TempUnprocessableEntityObjectResult(validationResult.Errors);
+                return new UnprocessableEntityObjectResult(validationResult.Errors);
             }
 
             var patcher = new ModelPatcher();
@@ -90,6 +89,5 @@ namespace Lisa.Excelsis.Api
         }
 
         private Database _db;
-        private IIdentity _user { get { return HttpContext.User.Identity; } }
     }
 }
