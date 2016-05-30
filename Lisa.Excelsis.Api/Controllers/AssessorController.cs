@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Lisa.Common.WebApi;
+using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace Lisa.Excelsis.Api
 {
     [Route("assessors")]
-    public class AssessorController
+    public class AssessorController : Controller
     {
         public AssessorController(Database database)
         {
@@ -16,6 +17,20 @@ namespace Lisa.Excelsis.Api
         {
             var result = await _db.FetchAssessors();
             return new OkObjectResult(result);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Post([FromBody] DynamicModel assessor)
+        {
+            if (assessor == null)
+            {
+                return new BadRequestResult();
+            }
+
+            dynamic result = await _db.PostAssessor(assessor);
+            var location = "";
+
+            return new CreatedResult(location, result);
         }
 
         private Database _db;

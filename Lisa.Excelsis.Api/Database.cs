@@ -87,6 +87,18 @@ namespace Lisa.Excelsis.Api
             return result;
         }
 
+        public async Task<DynamicModel> PostAssessor(dynamic assessor)
+        {
+            CloudTable table = await Connect("Assessors");
+            DynamicEntity assessorEntity = AssessorMapper.ToEntity(assessor);
+
+            TableOperation insertOperation = TableOperation.InsertOrReplace(assessorEntity);
+            var tableResult = await table.ExecuteAsync(insertOperation);
+
+            var result = AssessorMapper.ToModel(tableResult.Result);
+            return result;
+        }
+
         public async Task PatchAssessment(DynamicModel assessment)
         {
             CloudTable table = await Connect("Assessments");

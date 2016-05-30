@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Lisa.Common.WebApi;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Principal;
 
 namespace Lisa.Excelsis.Api
 {
