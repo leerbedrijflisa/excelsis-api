@@ -2,6 +2,8 @@
 using System.Threading.Tasks;
 using Lisa.Common.WebApi;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Lisa.Excelsis.Api
 {
@@ -16,7 +18,14 @@ namespace Lisa.Excelsis.Api
         [HttpGet]
         public async Task<ActionResult> Get()
         {
+            var k = HttpContext.Request.QueryString.ToString();
             var assessments = await _db.FetchAssessments();
+            List<FilterProperties> filters = new List<FilterProperties>();
+            if (k.Contains("student.Name"))
+            {
+
+            }
+//            Filter.UseFilter(assessments, );
             return new OkObjectResult(assessments);
         }
 
