@@ -16,16 +16,25 @@ namespace Lisa.Excelsis.Api
         }
 
         [HttpGet]
-        public async Task<ActionResult> Get()
+        public async Task<ActionResult> Get([FromQuery] string studentName, [FromQuery] string studentNumber)
         {
-            var k = HttpContext.Request.QueryString.ToString();
             var assessments = await _db.FetchAssessments();
+            var m = Request.Query;
             List<FilterProperties> filters = new List<FilterProperties>();
-            if (k.Contains("student.Name"))
+            foreach (var item in m.Keys)
             {
-
+                var q = Request.Query[item];
             }
-//            Filter.UseFilter(assessments, );
+            if (studentName != null)
+            {
+                if (studentName.Contains(','))
+                {
+                    var k = studentName.Split(',');
+                    filters.Add(new OrFilter("student.k", k));
+                }
+            }
+
+            assessments = Filter.UseFilter(assessments, filters);
             return new OkObjectResult(assessments);
         }
 

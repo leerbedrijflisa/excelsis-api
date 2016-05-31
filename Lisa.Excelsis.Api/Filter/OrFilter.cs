@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace Lisa.Excelsis.Api
 {
@@ -15,6 +16,27 @@ namespace Lisa.Excelsis.Api
 
         public override bool Apply(DynamicModel field)
         {
+            if (Key.Contains("."))
+            {
+                var k = Key.Split('.');
+                dynamic subfield = field;
+                foreach (string item in k)
+                {
+                    bool m = false;
+                    foreach (dynamic e in subfield)
+                    {
+                        //if (e.Key == item)
+                        //{
+                        //    m = true;
+                        //}
+                    }
+                    if (m == false)
+                    {
+                        return false;
+                    }
+                    subfield = (dynamic) subfield[item];
+                }
+            }
             if (!field.Contains(Key))
             {
                 return false;
@@ -29,7 +51,7 @@ namespace Lisa.Excelsis.Api
                         return true;
                     }
                 }
-                else if (string.Equals((string) field[Key], filterValue, StringComparison.OrdinalIgnoreCase))
+                else if (string.Equals((string) field[Key], filterValue, StringComparison.Ordinal))
                 {
                     return true;
                 }

@@ -42,7 +42,7 @@ namespace Lisa.Excelsis.Api
             return null;
         }
 
-        public static IEnumerable<dynamic> UseFilter(IEnumerable<DynamicModel> unproccesedList, IEnumerable<FilterProperties> filters)
+        public static IEnumerable<DynamicModel> UseFilter(IEnumerable<DynamicModel> unproccesedList, IEnumerable<FilterProperties> filters)
         {
             foreach (var unprocessedItem in unproccesedList)
             {
