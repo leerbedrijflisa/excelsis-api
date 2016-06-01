@@ -1,5 +1,4 @@
 ﻿using System;
-using Lisa.Common.WebApi;
 
 namespace Lisa.Excelsis.Api
 {
@@ -11,17 +10,30 @@ namespace Lisa.Excelsis.Api
             Values = value;
         }
 
-        public override bool Apply(DynamicModel field)
+        public override bool Apply(dynamic field)
         {
-            foreach (var item in Keys)
+            foreach (var key in Keys)
             {
-                if (!field.Contains(item))
+                if (key.Contains("."))
+                {
+                    var splittedKeys = key.Split('.');
+                    dynamic subfield = field;
+                    foreach (string singleKey in splittedKeys)
+                    {
+                        if (!subfield.Contains(singleKey))
+                        {
+                            return false;
+                        }
+                        subfield = (dynamic)subfield[singleKey];
+                    }
+                }
+                else if (!field.Contains(key))
                 {
                     break;
                 }
                 foreach (var filterValue in Values)
                 {
-                    if (string.Equals((string)field[item], filterValue, StringComparison.OrdinalIgnoreCase))
+                    if (string.Equals((string)field[key], filterValue, StringComparison.OrdinalIgnoreCase))
                     {
                         return true;
                     }

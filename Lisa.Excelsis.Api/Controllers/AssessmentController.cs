@@ -19,21 +19,25 @@ namespace Lisa.Excelsis.Api
         public async Task<ActionResult> Get([FromQuery] string studentName, [FromQuery] string studentNumber)
         {
             var assessments = await _db.FetchAssessments();
-            var m = Request.Query;
+            var requestQuery = Request.Query;
             List<FilterProperties> filters = new List<FilterProperties>();
-            foreach (var item in m.Keys)
+            foreach (var Key in requestQuery.Keys)
             {
-                var q = Request.Query[item];
-            }
-            if (studentName != null)
-            {
-                if (studentName.Contains(','))
+                var value = (string)Request.Query[Key];
+                if (allowedFields.Contains(Key.ToLower()) && value != string.Empty)
                 {
-                    var k = studentName.Split(',');
-                    filters.Add(new OrFilter("student.k", k));
+                    string[] filterStudentNames;
+                    if (value.Contains(','))
+                    {
+                        filterStudentNames = value.Split(',');
+                    }
+                    else
+                    {
+                        filterStudentNames = new string[] { value };
+                    }
+                    filters.Add(new OrFilter(Key, filterStudentNames));
                 }
             }
-
             assessments = Filter.UseFilter(assessments, filters);
             return new OkObjectResult(assessments);
         }
@@ -104,6 +108,17 @@ namespace Lisa.Excelsis.Api
             await _db.DeleteAssessments();
             return new StatusCodeResult(204);
         }
+
+        private static string[] allowedFields = new string[] {
+            "student.name",
+            "student.number",
+            "exam",
+            "subject",
+            "assessors.firstname",
+            "assessors.lastname",
+            "assessors.username",
+            "assessors.teachercode"
+        };
 
         private Database _db;
     }

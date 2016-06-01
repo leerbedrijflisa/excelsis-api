@@ -1,7 +1,5 @@
-﻿using Lisa.Common.WebApi;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Lisa.Excelsis.Api
 {
@@ -13,9 +11,22 @@ namespace Lisa.Excelsis.Api
             Value = value;
         }
 
-        public override bool Apply(DynamicModel field)
+        public override bool Apply(dynamic field)
         {
-            if (!field.Contains(Key))
+            if (Key.Contains("."))
+            {
+                var splittedKey = Key.Split('.');
+                dynamic subfield = field;
+                foreach (string item in splittedKey)
+                {
+                    if (!subfield.Contains(item))
+                    {
+                        return false;
+                    }
+                    subfield = (dynamic)subfield[item];
+                }
+            }
+            else if(!field.Contains(Key))
             {
                 return false;
             }
@@ -23,10 +34,14 @@ namespace Lisa.Excelsis.Api
             {
                 if (field[Key] is IEnumerable<string>)
                 {
-                    var fieldProperties = (IEnumerable<string>) field[Key];
-                    if (!fieldProperties.Contains(filterValue))
+                    var fieldProperties = new List<string>();
+                    foreach (var fieldPropertyToLower in (IEnumerable<string>)field[Key])
                     {
-                        return false;
+                        fieldProperties.Add(fieldPropertyToLower.ToLower());
+                    }
+                    if (fieldProperties.Contains(filterValue.ToLower()))
+                    {
+                        return true;
                     }
                 }
                 else if (!string.Equals((string) field[Key], filterValue, StringComparison.OrdinalIgnoreCase))

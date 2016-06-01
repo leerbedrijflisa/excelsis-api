@@ -1,8 +1,5 @@
-﻿using Lisa.Common.WebApi;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 
 namespace Lisa.Excelsis.Api
 {
@@ -14,44 +11,71 @@ namespace Lisa.Excelsis.Api
             Value = value;
         }
 
-        public override bool Apply(DynamicModel field)
+        public override bool Apply(dynamic field)
         {
+            dynamic arraySubfield = string.Empty;
             if (Key.Contains("."))
             {
                 var k = Key.Split('.');
                 dynamic subfield = field;
                 foreach (string item in k)
                 {
-                    bool m = false;
-                    foreach (dynamic e in subfield)
+                    if (subfield is IEnumerable<object>)
                     {
-                        //if (e.Key == item)
-                        //{
-                        //    m = true;
-                        //}
+                        field = subfield;
+                        arraySubfield = item;
+                        foreach (var subfieldItem in subfield)
+                        {
+                            if (!subfieldItem.Contains(item))
+                            {
+                                return false;
+                            }
+                        }
                     }
-                    if (m == false)
+                    else if (!subfield.Contains(item))
                     {
                         return false;
                     }
-                    subfield = (dynamic) subfield[item];
+                    else
+                    {
+                        subfield = (dynamic)subfield[item];
+                    }
                 }
             }
-            if (!field.Contains(Key))
+            else if (!field.Contains(Key))
             {
                 return false;
             }
             foreach (var filterValue in Value)
             {
-                if (field[Key] is IEnumerable<string>)
+                if (field is IEnumerable<object>)
                 {
-                    var fieldProperties = (IEnumerable<string>) field[Key];
-                    if (fieldProperties.Contains(filterValue))
+                    var fieldProperties = new List<string>();
+                    foreach (var fieldPropertyToLower in field)
+                    {
+                        string meep = (string)fieldPropertyToLower[arraySubfield];
+                        fieldProperties.Add(meep.ToLower());
+                    }
+                    if (fieldProperties.Contains(filterValue.ToLower()))
                     {
                         return true;
                     }
                 }
-                else if (string.Equals((string) field[Key], filterValue, StringComparison.Ordinal))
+                else if (field is IEnumerable<string>)
+                {
+                    var fieldProperties = new List<string>();
+
+                    foreach (var fieldPropertyToLower in (IEnumerable<string>)field)
+                    {
+                        string meep = (string)fieldPropertyToLower[arraySubfield];
+                        fieldProperties.Add(meep.ToLower());
+                    }
+                    if (fieldProperties.Contains(filterValue.ToLower()))
+                    {
+                        return true;
+                    }
+                }
+                else if (string.Equals((string) field[Key], filterValue, StringComparison.OrdinalIgnoreCase))
                 {
                     return true;
                 }
