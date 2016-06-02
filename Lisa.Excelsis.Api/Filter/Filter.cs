@@ -28,7 +28,8 @@ namespace Lisa.Excelsis.Api
             users.Add(user);
 
             var filter = new List<FilterProperties>();
-            filter.Add(new CompositeOrFilter(new string[] { "Hobbies", "Meeeeeep" }, new string[] { "movies", "games" }));
+            filter.Add(new CompositeOrFilter(new string[] { "Hobbies", "FirstName" }, new string[] { "movies", "Roald" }));
+            filter.Add(new CompositeAndFilter(new string[] { "FirstName", "LastName" }, new string[] { "Marvin", "Meijwaard" }));
             filter.Add(new AndFilter("Hobbies", new string[] { "movies" }));
             filter.Add(new OrFilter( "FirstName", new string[] { "Marvin", "Ramon" }));
 

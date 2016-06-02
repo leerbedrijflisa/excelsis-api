@@ -38,6 +38,7 @@ namespace Lisa.Excelsis.Api
                     filters.Add(new OrFilter(Key, filterStudentNames));
                 }
             }
+            filters.Add(new CompositeAndFilter(new string[] { "assessors.firstname", "assessors.lastname" }, new string[] { "joost", "ronkes agerbeek" }));
             assessments = Filter.UseFilter(assessments, filters);
             return new OkObjectResult(assessments);
         }
