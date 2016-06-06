@@ -51,19 +51,31 @@ namespace Lisa.Excelsis.Api
             var blub = Keys[0].Split('.');
             if (blub[0] == "assessors")
             {
+                var meep = new List<string>();
+                foreach (var item in Keys)
+                {
+                    meep.Add(item.Split('.')[1]);
+                }
+                if (Keys.Length != Values.Length)
+                {
+                    return false;
+                }
+                var derp = new List<KeyValuePair<string, String>>();
+                for (int i = 0; i < Keys.Length; i++)
+                {
+                    derp.Add(new KeyValuePair<string, string>(meep[i], Values[i]));
+                }
                 foreach (var item in field[blub[0]])
                 {
-                    if (Keys.Length != Values.Length)
+                    foreach (var okie in derp)
                     {
-                        return false;
-                    }
-                    for (int i = 0; i < Keys.Length; i++)
-                    {
-                        if (field[blub[0]][blub[1]] == Values[i])
+                        if (item[okie.Key].ToLower() == okie.Value.ToLower())
                         {
-
-                            System.Diagnostics.Debug.WriteLine("edwjgberuigeiuuvnefjvkenbujnejnetjjetjnhuenheiunhujnjasgek");
-                            return true;
+                            System.Diagnostics.Debug.WriteLine(okie.Value);
+                        }
+                        else
+                        {
+                            
                         }
                     }
                 }

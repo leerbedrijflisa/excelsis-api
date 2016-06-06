@@ -1,0 +1,8 @@
+/assessments?crebo=95320&cohort=2013
+/assessments?crebo=95320&cohort=2013,2014
+
+/assessors?firstName=joost&lastName=snoek
+/assessors?firstName=joost,peter&lastName=snoek
+
+/assessments?assessors.firstName=joost&assessors.lastName=snoek
+

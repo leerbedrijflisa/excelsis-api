@@ -38,8 +38,29 @@ namespace Lisa.Excelsis.Api
                     filters.Add(new OrFilter(Key, filterStudentNames));
                 }
             }
-            filters.Add(new CompositeAndFilter(new string[] { "assessors.firstname", "assessors.lastname" }, new string[] { "joost", "ronkes agerbeek" }));
+            //filters.Add(new CompositeAndFilter(new string[] { "assessors.firstname", "assessors.lastname" }, new string[] { "joost", "ronkes agerbeek" }));
             assessments = Filter.UseFilter(assessments, filters);
+            var assessorsKey = requestQuery.Keys.Where(k => k.Contains("assessors"));
+            if (assessorsKey.Count() != 0)
+            {
+                foreach (dynamic assessment in assessments)
+                {
+                    foreach (var assessors in assessment.Assessors)
+                    {
+                        string[] assessorsKeys = new string[] { };
+                        int i = 0;
+                        foreach (var item in assessorsKey)
+                        {
+                            assessorsKeys[i] = "henk";
+                            i++;
+                        }
+                        var filterAssessors = new List<FilterProperties>();
+                        filterAssessors.Add(new OrFilter(assessors, assessorsKeys));
+                        Filter.UseFilter(assessors, filterAssessors);
+                    }
+                }
+            }
+
             return new OkObjectResult(assessments);
         }
 
