@@ -14,8 +14,36 @@ namespace Lisa.Excelsis.Api
         }
 
         [HttpGet]
-        public async Task<ActionResult> Get()
+        public async Task<ActionResult> Get([FromQuery] string sort, [FromQuery] string order)
         {
+            if (!string.IsNullOrWhiteSpace(sort))
+            {
+                var sorting = sort.Split(new[] { ',' });
+                string[] ordering = new string[sorting.Length];
+                for (int i = 0; i < ordering.Length; i++)
+                {
+                    ordering[i] = "asc";
+                }
+                if (!string.IsNullOrWhiteSpace(order))
+                {
+                    int orderCount = 0;
+                    foreach (var orderValue in order.Split(new[] { ',' }))
+                    {
+                        if (orderCount == sorting.Length)
+                        {
+                            break;
+                        }
+                        ordering[orderCount] = orderValue;
+                        orderCount++;
+                    }
+                }
+
+                Sorting sortingObj = new Sorting(sorting, ordering);
+
+                var result = await _db.FetchAssessments(sortingObj);
+
+                return new OkObjectResult(result);
+            }
             var assessments = await _db.FetchAssessments();
             return new OkObjectResult(assessments);
         }
