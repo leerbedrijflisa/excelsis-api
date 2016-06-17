@@ -4,7 +4,6 @@ using Lisa.Common.WebApi;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Extensions.Primitives;
 
 namespace Lisa.Excelsis.Api
 {
@@ -17,51 +16,63 @@ namespace Lisa.Excelsis.Api
         }
 
         [HttpGet]
-        public async Task<ActionResult> Get([FromQuery] string studentName, [FromQuery] string studentNumber)
+        public async Task<ActionResult> Get()
         {
             var assessments = await _db.FetchAssessments();
-           // assessments = applyFilter(assessments);
-            //var assessorsKey = Request.Query.Keys.Where(k => k.Contains("assessors"));
-            //if (assessorsKey.Count() != 0)
-            //{
-            //    foreach (dynamic assessment in assessments)
-            //    {
-            //        foreach (var assessors in assessment.Assessors)
-            //        {
-            //            var assessorsKeys = new List<string>();
-            //            var assessorsValues = new List<string[]>();
-            //            foreach (var item in assessorsKey)
-            //            {
-            //                StringValues values;
-            //                Request.Query.TryGetValue(item, out values);
-            //                assessorsValues.Add(values.ToArray());
-            //                assessorsKeys.Add(item.Split('.')[1]);
-            //            }
-
-            //            var assessorsKeyArray = assessorsKeys.ToArray();
-            //            var filterAssessors = new List<FilterProperties>();
-
-            //            for (int i = 0; i < assessorsKeyArray.Count(); i++)
-            //            {
-            //                filterAssessors.Add(new OrFilter(assessorsKeyArray[i], assessorsValues[i]));
-            //            }
-            //            var r = new List<DynamicModel>();
-            //            foreach (var assessorsItem in assessors)
-            //            {
-            //                r.Add(assessorsItem);
-            //            }
-            //        }
-            //    }
-            //}
-
-            var derpiederp = new OrFilter(
-                                new AndFilter(
-                                    new EqualsFilter("assessors.FirstName", "Peter"),
-                                    new EqualsFilter("assessors.LastName", "Snoek")
-                                )
-                            );
-            assessments = derpiederp.Apply(assessments);
-
+            if (!string.IsNullOrWhiteSpace(Request.QueryString.ToString()))
+            {
+                var trimmedQueryString = Request.QueryString.ToString().TrimStart('?');
+                if (!string.IsNullOrWhiteSpace(trimmedQueryString))
+                {
+                    var splittedQueryString = trimmedQueryString.Split('&');
+                    var listValues = new List<Filter>();
+                    var assessorValues = new List<KeyValuePair<string, string>>();
+                    foreach (var queryItem in splittedQueryString)
+                    {
+                        var splittedQueryItem = queryItem.Split('=');
+                        if (!allowedFields.Contains(splittedQueryItem[0].ToLower()))
+                        {
+                            continue;
+                        }
+                        if (splittedQueryString[0].Contains('.') && splittedQueryItem[0].Substring(0, splittedQueryItem[0].IndexOf('.')) == "assessors")
+                        {
+                            if (splittedQueryItem[1].Contains(","))
+                            {
+                                foreach (var item in splittedQueryItem[1].Split(','))
+                                {
+                                    assessorValues.Add(new KeyValuePair<string, string>(splittedQueryItem[0], item));
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (splittedQueryItem[1].Contains(","))
+                            {
+                                listValues.Add(new EqualsFilter(splittedQueryItem[0], splittedQueryItem[1].Split(',')));
+                            }
+                            else
+                            {
+                                listValues.Add(new EqualsFilter(splittedQueryItem[0], splittedQueryItem[1]));
+                            }
+                        }
+                    }
+                    var orFilter = new List<Filter>();
+                    if (assessorValues.Count != 0)
+                    {
+                        var derp = assessorValues.Where(a => a.Key.ToLower() == "assessors.lastname").ToList();
+                        var derp2 = assessorValues.Where(a => a.Key.ToLower() == "assessors.firstname").ToList();
+                        for (int i = 0; i < derp.Count; i++)
+                        {
+                            orFilter.Add(new AndFilter(new EqualsFilter(derp[i].Key, derp[i].Value), new EqualsFilter(derp2[i].Key, derp2[i].Value)));
+                        }
+                        listValues.Add(new OrFilter(orFilter.ToArray()));
+                    }
+                    var assessmentsFilter = new AndFilter(
+                                            listValues.ToArray()
+                                     );
+                    assessments = assessmentsFilter.Apply(assessments);
+                }
+            }
             return new OkObjectResult(assessments);
         }
 
