@@ -59,11 +59,32 @@ namespace Lisa.Excelsis.Api
                     var orFilter = new List<Filter>();
                     if (assessorValues.Count != 0)
                     {
-                        var derp = assessorValues.Where(a => a.Key.ToLower() == "assessors.lastname").ToList();
-                        var derp2 = assessorValues.Where(a => a.Key.ToLower() == "assessors.firstname").ToList();
-                        for (int i = 0; i < derp.Count; i++)
+                        var assessorLastName = assessorValues.Where(a => a.Key.ToLower() == "assessors.lastname").ToList();
+                        var assessorFirstName = assessorValues.Where(a => a.Key.ToLower() == "assessors.firstname").ToList();
+                        var assessorTeacherCode = assessorValues.Where(a => a.Key.ToLower() == "assessors.teachercode").ToList();
+                        var assessorUserName = assessorValues.Where(a => a.Key.ToLower() == "assessors.username").ToList();
+                        int highestArrayIndex = assessorLastName.Count();
+                        if (highestArrayIndex < assessorFirstName.Count())
                         {
-                            orFilter.Add(new AndFilter(new EqualsFilter(derp[i].Key, derp[i].Value), new EqualsFilter(derp2[i].Key, derp2[i].Value)));
+                            highestArrayIndex = assessorFirstName.Count();
+                        }
+                        if (highestArrayIndex < assessorTeacherCode.Count())
+                        {
+                            highestArrayIndex = assessorTeacherCode.Count();
+                        }
+                        if (highestArrayIndex < assessorUserName.Count())
+                        {
+                            highestArrayIndex = assessorUserName.Count();
+                        }
+
+                        for (int i = 0; i < highestArrayIndex; i++)
+                        {
+                            orFilter.Add(new AndFilter(
+                                assessorLastName.Count() < i ? new EqualsFilter(assessorLastName[i].Key, assessorLastName[i].Value): null,
+                                assessorFirstName.Count() < i ? new EqualsFilter(assessorFirstName[i].Key, assessorFirstName[i].Value) : null,
+                                assessorTeacherCode.Count() < i ? new EqualsFilter(assessorTeacherCode[i].Key, assessorTeacherCode[i].Value) : null,
+                                assessorUserName.Count() < i ? new EqualsFilter(assessorUserName[i].Key, assessorUserName[i].Value): null
+                                ));
                         }
                         listValues.Add(new OrFilter(orFilter.ToArray()));
                     }
