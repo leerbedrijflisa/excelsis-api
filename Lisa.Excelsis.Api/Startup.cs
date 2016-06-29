@@ -27,10 +27,7 @@ namespace Lisa.Excelsis.Api
             services.AddApplicationInsightsTelemetry(Configuration);
 
             services.Configure<TableStorageSettings>(Configuration.GetSection("TableStorage"));
-            services.AddMvc().AddJsonOptions(opts =>
-            {
-                opts.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-            });
+            services.AddMvc();
 
             services.AddCors();
 
