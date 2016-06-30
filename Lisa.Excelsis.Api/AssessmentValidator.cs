@@ -7,6 +7,7 @@ namespace Lisa.Excelsis.Api
     {
         private void CheckDigits(string fieldName, object value)
         {
+            //check if the value is digits only
             string valueString = value.ToString();
             bool digitsOnly = valueString.All(char.IsDigit);
             if (!digitsOnly)
@@ -49,7 +50,6 @@ namespace Lisa.Excelsis.Api
             Optional("cohort", CheckDigits, NotEmpty, Length(4), TypeOf(DataTypes.String));
             Required("subject", NotEmpty, TypeOf(DataTypes.String));
             Required("exam", NotEmpty, TypeOf(DataTypes.String));
-            //Optional("assessors", NotEmpty, IsArray(DataTypes.Object));
             Optional("assessors.firstName", NotEmpty, TypeOf(DataTypes.String));
             Optional("assessors.lastName", NotEmpty, TypeOf(DataTypes.String));
             Optional("assessors.userName", NotEmpty, TypeOf(DataTypes.String));

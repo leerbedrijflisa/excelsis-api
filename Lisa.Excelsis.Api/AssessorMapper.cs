@@ -15,7 +15,7 @@ namespace Lisa.Excelsis.Api
             }
 
             dynamic entity = new DynamicEntity();
-
+            // check if the assessment already exists, if it doesn't it will set the metadata else it will retrieve the metadata
             dynamic metadata = model.GetMetadata();
             if (metadata == null)
             {
@@ -53,7 +53,7 @@ namespace Lisa.Excelsis.Api
             model.LastName = entity.LastName;
             model.UserName = entity.UserName;
             model.TeacherCode = entity.TeacherCode;
-            
+            //sets the metadata from the entity
             var metadata = new
             {
                 PartitionKey = entity.PartitionKey,
